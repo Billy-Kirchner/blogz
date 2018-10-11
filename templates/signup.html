@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form  action="/signup" name='user_info_form' method="POST">
+    
+    <label for='create-username'>
+        Enter your Username:
+        <input id='create-username' type='text' name='create-username' value='{{username}}'>
+        {% if enter_email_error %}
+            <p class='error'>{{create_username_error}}</p>
+        {% endif %}
+    </label><br>
+
+    <label for='create-pw'>
+        Create your password:
+        <input id='create-pw' type='password' name='create-pw'>
+        {% if create_pw_error %}
+            <p class='error'>{{create_pw_error}}</p>
+        {% endif %}
+    </label><br>
+
+    <label for='confirm-pw'>
+        Confirm your password:
+        <input id='confirm-pw' type='password' name='confirm-pw'>
+        {% if confirm_pw_error %}
+            <p class='error'>{{confirm_pw_error}}</p>
+        {% endif %}
+    </label><br>
+
+    <input type='submit' value='Register'>
+</form>
+
+
+
+{% endblock %}
