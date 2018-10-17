@@ -43,8 +43,14 @@ def require_login():
 def login():
     if request.method == 'POST':
         username = request.form['enter-username']
-        password = request.form['enter-pw']
+        password = request.form['enter-pw']        
         user = User.query.filter_by(username=username).first()
+        if not user:
+            username_error = "Username does not exist"
+            return render_template('login.html', username=username, username_error=username_error)
+        if user.password != password:
+            enter_pw_error = "Invalid password"
+            return render_template('login.html', username=username, enter_pw_error=enter_pw_error)
         if user and user.password == password:
             session['username'] = username
             flash("Logged in")
@@ -58,16 +64,28 @@ def signup():
         username = request.form['create-username']
         password = request.form['create-pw']
         verify = request.form['confirm-pw']
-
+        create_username_error = ''
+        create_pw_error = ''
+        confirm_pw_error = ''
         existiing_user = User.query.filter_by(username=username).first()
-        if not existiing_user:
+        if existiing_user:
+            create_username_error = "Username already exists"
+        if username.strip() == '' or len(username) < 3 or ' ' in username:
+            create_username_error = "Invalid username (Must be at least 3 characters and contain no spaces)"
+        if password.strip == '' or len(password) < 3 or ' ' in password:
+            create_pw_error = "Invalid password (Must be at least 3 characters and contain no spaces)"
+        if verify != password:
+            confirm_pw_error = "Passwords do not match"
+        if create_username_error or create_pw_error or confirm_pw_error:
+            return render_template('signup.html', create_username_error=create_username_error, username=username,
+                                    create_pw_error=create_pw_error, confirm_pw_error=confirm_pw_error)
+        else:
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
             return redirect('/addpost')
-        else:
-            return '<h1>Duplicate User</h1>'
+
             
     return render_template('signup.html')
 

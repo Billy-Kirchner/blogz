@@ -12,6 +12,7 @@
     <body>
         <a href='/'>Main Blog Page</a>
         <pre></pre><a href='/addpost'>Add a Blog Entry</a>
+        <pre></pre><a href='/logout'>Logout</a>
         
         {% with messages = get_flashed_messages(with_categories=True) %}
         <ul>
@@ -20,6 +21,7 @@
         {% endfor %}
         </ul>
         {% endwith %}
+        
         {% block content %}
         {% endblock %}
     </body>

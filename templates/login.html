@@ -6,7 +6,7 @@
     <label for='enter-username'>
         Enter your Username:
         <input id='enter-username' type='text' name='enter-username' value='{{username}}'>
-        {% if enter_email_error %}
+        {% if username_error %}
             <p class='error'>{{username_error}}</p>
         {% endif %}
     </label><br>
@@ -14,11 +14,15 @@
     <label for='enter-pw'>
         Enter your password:
         <input id='enter-pw' type='password' name='enter-pw'>
-        {% if create_pw_error %}
+        {% if enter_pw_error %}
             <p class='error'>{{enter_pw_error}}</p>
         {% endif %}
     </label><br>
 
     <input type='submit' value='Login'>
 </form>
+
+<div></div>
+<p>Don't have an account yet? <a href='/signup'>Create an Account</a></p>
+
 {% endblock %}

@@ -6,7 +6,7 @@
     <label for='create-username'>
         Enter your Username:
         <input id='create-username' type='text' name='create-username' value='{{username}}'>
-        {% if enter_email_error %}
+        {% if create_username_error %}
             <p class='error'>{{create_username_error}}</p>
         {% endif %}
     </label><br>
