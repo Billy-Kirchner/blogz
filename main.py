@@ -98,12 +98,13 @@ def addpost():
     if request.method == 'POST':
         title = request.form['new-title']
         body = request.form['new-body']
+        owner = User.query.filter_by(username=session['username']).first()
         if title.strip() == '':
             title_error = "Please enter a blog title"
         if body.strip() == '':
             body_error = "Please write a blog entry"
         if title_error == '' and body_error == '':
-            new_blog = Blog(title, body)      
+            new_blog = Blog(title, body, owner)      
             db.session.add(new_blog)
             db.session.commit()
             id = new_blog.id
@@ -117,17 +118,25 @@ def logout():
     del session['username']
     return redirect('/login')
 
-@app.route("/", methods=['POST','GET'])
-def index():
+@app.route("/blog", methods=['POST','GET'])
+def blog_list():
     id = request.args.get('id')
+    user_id = request.args.get('user_id')
+    blogs = Blog.query.all()
+    users = User.query.all()
     if id:
         blogs = Blog.query.filter_by(id=id).all()
-        return render_template('single_entry.html', blogs=blogs)
+        return render_template('single_entry.html', blogs=blogs, users=users)
+    if user_id:
+        blogs = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('blog.html', blogs=blogs, users=users)
 
-    blogs = Blog.query.all()
-    return render_template('blog.html', blogs=blogs)
 
+    return render_template('blog.html', blogs=blogs, users=users)
 
-
+@app.route("/", methods=['POST', 'GET'])
+def index():
+    users = User.query.all()
+    return render_template('index.html', users=users)
 if __name__ == '__main__':
     app.run()

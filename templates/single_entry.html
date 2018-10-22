@@ -8,5 +8,10 @@
 
 {% for blog in blogs %}
 <p>{{blog.body}}</p>
+{% for user in users %}
+{% if blog.owner_id == user.id %}
+<p>Written by: <a href='./blog?user_id={{user.id}}'>{{user.username}}</a></p>
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endblock %}
