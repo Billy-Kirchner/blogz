@@ -35,7 +35,7 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes =['login', 'signup']
+    allowed_routes =['login', 'signup', 'blog_list', 'index']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
@@ -109,7 +109,8 @@ def addpost():
             db.session.commit()
             id = new_blog.id
             blogs = Blog.query.filter_by(id=id).all()
-            return render_template('single_entry.html', blogs=blogs)
+            users = User.query.all()
+            return render_template('single_entry.html', blogs=blogs, users=users)
             
     return render_template('addpost.html', title_error=title_error, body_error=body_error, title=title, body=body)
 
@@ -118,7 +119,7 @@ def logout():
     del session['username']
     return redirect('/login')
 
-@app.route("/blog", methods=['POST','GET'])
+@app.route('/blog', methods=['POST','GET'])
 def blog_list():
     id = request.args.get('id')
     user_id = request.args.get('user_id')
